@@ -9,6 +9,7 @@
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Comparator;
 
@@ -29,6 +30,7 @@ public class Point implements Comparable<Point> {
         this.y = y;
     }
 
+
     /**
      * Draws this point to standard draw.
      */
@@ -36,6 +38,7 @@ public class Point implements Comparable<Point> {
         /* DO NOT MODIFY */
         StdDraw.point(x, y);
     }
+
 
     /**
      * Draws the line segment between this point and the specified point to standard draw.
@@ -58,8 +61,23 @@ public class Point implements Comparable<Point> {
      * @return the slope between this point and the specified point
      */
     public double slopeTo(Point that) {
-        /* YOUR CODE HERE */
-        
+        /* Double.POSITIVE_INFINITY*/
+        if (this.x == that.x) {
+            if (this.y == that.y) {                                             // detergent
+                return Double.NEGATIVE_INFINITY;
+            }
+            else {                                                              // vertical
+                return Double.POSITIVE_INFINITY;
+            }
+        }
+        else {
+            if (this.y == that.y) {                                             // vertical
+                return +0.0;
+            }
+            else return (double) (that.y - this.y) / (double) (that.x
+                    - this.x);           // normal cases
+        }
+
     }
 
     /**
@@ -74,6 +92,12 @@ public class Point implements Comparable<Point> {
      */
     public int compareTo(Point that) {
         /* YOUR CODE HERE */
+        if (this.y < that.y) return -1;
+        if (this.y > that.y) return +1;
+        if (this.x < that.x) return -1;
+        if (this.x > that.x) return +1;
+        return 0;
+
     }
 
     /**
@@ -84,6 +108,25 @@ public class Point implements Comparable<Point> {
      */
     public Comparator<Point> slopeOrder() {
         /* YOUR CODE HERE */
+        return new SlopeOrder();
+
+    }
+
+    private class SlopeOrder implements Comparator<Point> {
+        public int compare(Point q1, Point q2) {
+            double slop1 = Point.this.slopeTo(q1);
+            double slop2 = Point.this.slopeTo(q2);
+            if (slop1 != slop2) {
+                if (slop1 < slop2) return -1;
+                else return 1;
+            }
+            else {
+                return 0;
+            }
+
+
+        }
+
     }
 
 
@@ -103,5 +146,27 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(100, 100);
+        Point p3 = new Point(50, 70);
+        Point p4 = new Point(0, 60);
+        Point[] plis = new Point[5];
+        plis[0] = p1;
+        plis[1] = p2;
+        plis[2] = p3;
+        plis[3] = p4;
+        //Arrays.sort(plis);
+        for (Point item : plis) {
+            System.out.print(item.toString());
+        }
+        int b = (p1.compareTo(p2));
+        StdOut.println(b);
+
+        // Comparator c = p1.slopeOrder();
+        // Arrays.sort(plis, c);
+        // for (Point item : plis) {
+        //     StdOut.println(item);
+        // }
     }
+
 }

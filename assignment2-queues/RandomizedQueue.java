@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue<Item> extends Comparable implements Iterable<Item> {
     private int numItem;                                 // number of elements in quene
     private Item[] array;                                // array of items
 

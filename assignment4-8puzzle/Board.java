@@ -10,27 +10,28 @@ import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
 
-public class Board implements Comparable<Board> {
-    private int nDim;
-    private int[][] board;
-    private int[][] rightBoard;
+public class Board {
+    private final int nDim;
+    private final int[][] board;
+    private final int[][] rightBoard;
     private int step = 0;
 
     public Board(int[][] blocks) {
         this.board = blocks.clone();
         nDim = this.board.length;
-        rightBoard = new int[nDim][nDim];
-        getRightBoard(nDim);
+        rightBoard = getRightBoard(nDim);
 
     }
 
-    private void getRightBoard(int dim) {
+    private int[][] getRightBoard(int dim) {
+        int[][] rBoard = new int[dim][dim];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                rightBoard[i][j] = dim * i + j + 1;
+                rBoard[i][j] = dim * i + j + 1;
             }
         }
-        rightBoard[dim - 1][dim - 1] = 0;
+        rBoard[dim - 1][dim - 1] = 0;
+        return rBoard;
 
     }
 
@@ -151,41 +152,26 @@ public class Board implements Comparable<Board> {
 
 
         if (blankX < nDim - 1) {
-            Board downBoard = swap(blankX, blankY, blankX + 1, blankY);
-            boardStack.push(downBoard);
+            Board down_Board = swap(blankX, blankY, blankX + 1, blankY);
+            boardStack.push(down_Board);
         }
 
 
         if (blankY > 0) {
-            Board leftBoard = swap(blankX, blankY, blankX, blankY - 1);
-            boardStack.push(leftBoard);
+            Board left_Board = swap(blankX, blankY, blankX, blankY - 1);
+            boardStack.push(left_Board);
 
         }
 
 
         if (blankY < nDim - 1) {
-            Board rightBoard = swap(blankX, blankY, blankX, blankY + 1);
-            boardStack.push(rightBoard);
+            Board right_Board = swap(blankX, blankY, blankX, blankY + 1);
+            boardStack.push(right_Board);
 
         }
 
 
         return boardStack;
-    }
-
-    /**
-     * @param that another Board to be compared
-     */
-
-    public int compareTo(Board that) {
-        int thisPri;
-        int thatPri;
-        thisPri = this.manhattan() + step;
-        thatPri = that.manhattan() + that.step;
-        if (thisPri > thatPri) return 1;
-        if (thatPri > thisPri) return -1;
-        return 0;
-
     }
 
 
@@ -202,7 +188,7 @@ public class Board implements Comparable<Board> {
     }
 
     public static void main(String[] args) {
-        int[][] block = { { 8, 0, 3 }, { 4, 1, 2 }, { 7, 6, 5 } };
+        int[][] block = { { 0, 8, 3 }, { 4, 1, 2 }, { 7, 6, 5 } };
         Board b = new Board(block);
         StdOut.println(b);
         // StdOut.println("Board's Hamming is " + b.hamming());

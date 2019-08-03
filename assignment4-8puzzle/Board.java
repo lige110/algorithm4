@@ -4,22 +4,23 @@
  *  Description:build a datatype Board
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
 
-import java.util.Iterator;
+import java.util.Arrays;
 
 public class Board {
     private final int nDim;
     private final int[][] board;
-    private final int[][] rightBoard;
-    private int step = 0;
 
     public Board(int[][] blocks) {
-        this.board = blocks.clone();
-        nDim = this.board.length;
-        rightBoard = getRightBoard(nDim);
+        nDim = blocks.length;
+        board = new int[nDim][nDim];
+        for (int i = 0; i < nDim; i++) {
+            this.board[i] = blocks[i].clone();
+        }
+
 
     }
 
@@ -57,30 +58,31 @@ public class Board {
 
     public int hamming() {
         int mis = 0;
+        int[][] corBoard = getRightBoard(nDim);
         for (int i = 0; i < nDim; i++) {
             for (int j = 0; j < nDim; j++) {
-                if (rightBoard[i][j] != 0 && rightBoard[i][j] != board[i][j]) mis++;
+                if (corBoard[i][j] != 0 && corBoard[i][j] != board[i][j]) mis++;
             }
         }
         return mis;
     }
 
     public int manhattan() {
-        int man_dis = 0;
-        int des_i;
-        int des_j;
+        int manDistance = 0;
+        int desI;
+        int desJ;
         for (int i = 0; i < nDim; i++) {
             for (int j = 0; j < nDim; j++) {
-                int cur_num = board[i][j];
-                if (cur_num == 0 || cur_num == i * nDim + j + 1) continue;
-                des_i = (cur_num - 1) / nDim;
-                des_j = cur_num - des_i * nDim - 1;
-                man_dis = man_dis + Math.abs(des_i - i) + Math.abs(des_j - j);
+                int curNumber = board[i][j];
+                if (curNumber == 0 || curNumber == i * nDim + j + 1) continue;
+                desI = (curNumber - 1) / nDim;
+                desJ = curNumber - desI * nDim - 1;
+                manDistance = manDistance + Math.abs(desI - i) + Math.abs(desJ - j);
 
             }
         }
 
-        return man_dis;
+        return manDistance;
     }
 
     public boolean isGoal() {
@@ -91,15 +93,16 @@ public class Board {
         Board twin;
         int temp;
         int x1 = 0, y1 = 0;
-        int x2 = 0, y2 = 0;
+        int x2 = 0, y2 = 1;
         int[][] twinArray = new int[nDim][nDim];
-
-        while ((x1 == x2 && y1 == y2) || board[x1][y1] == 0 || board[x2][y2] == 0) {
-            x1 = StdRandom.uniform(nDim);
-            x2 = StdRandom.uniform(nDim);
-            y1 = StdRandom.uniform(nDim);
-            y2 = StdRandom.uniform(nDim);
+        // eliminate the zero
+        if (board[x1][y1] == 0) {
+            x1 = x1 + 1;
         }
+        if (board[x2][y2] == 0) {
+            x2 = x2 + 1;
+        }
+
         for (int i = 0; i < nDim; i++) {
             twinArray[i] = board[i].clone();
         }
@@ -116,9 +119,19 @@ public class Board {
         if (y == null) return false;
         if (this.getClass() != y.getClass()) return false;
         Board that = (Board) y;
+        if (this.board.length != that.board.length) return false;
+        if (this.board[0].length != that.board[0].length) return false;
 
-        return this.board
-                == that.board;                                        //board is a private variable
+        boolean equal = true;
+        for (int i = 0; i < nDim; i++) {
+            if (!Arrays.equals(this.board[i], that.board[i])) {
+                equal = false;
+                break;
+            }
+
+        }
+        return equal;
+
     }
 
     public Iterable<Board> neighbors() {
@@ -140,7 +153,7 @@ public class Board {
             if (flg == 1) break;
         }
 
-        /**
+        /*
          * generate(if exists) the neighbours in sequence up down left right
          */
 
@@ -152,21 +165,21 @@ public class Board {
 
 
         if (blankX < nDim - 1) {
-            Board down_Board = swap(blankX, blankY, blankX + 1, blankY);
-            boardStack.push(down_Board);
+            Board downBoard = swap(blankX, blankY, blankX + 1, blankY);
+            boardStack.push(downBoard);
         }
 
 
         if (blankY > 0) {
-            Board left_Board = swap(blankX, blankY, blankX, blankY - 1);
-            boardStack.push(left_Board);
+            Board leftBoard = swap(blankX, blankY, blankX, blankY - 1);
+            boardStack.push(leftBoard);
 
         }
 
 
         if (blankY < nDim - 1) {
-            Board right_Board = swap(blankX, blankY, blankX, blankY + 1);
-            boardStack.push(right_Board);
+            Board rightBoard = swap(blankX, blankY, blankX, blankY + 1);
+            boardStack.push(rightBoard);
 
         }
 
@@ -181,6 +194,7 @@ public class Board {
         for (int i = 0; i < nDim; i++) {
             for (int j = 0; j < nDim; j++) {
                 s.append(String.format("%2d", board[i][j]));
+                s.append(' ');
             }
             s.append('\n');
         }
@@ -188,23 +202,47 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        int[][] block = { { 0, 8, 3 }, { 4, 1, 2 }, { 7, 6, 5 } };
-        Board b = new Board(block);
-        StdOut.println(b);
-        // StdOut.println("Board's Hamming is " + b.hamming());
-        // StdOut.println("Board's Manhattan is " + b.manhattan());
-        // StdOut.println("Borad is the goal " + b.isGoal());
-        // Board twin = b.twin();
-        // StdOut.println(twin);
-        // StdOut.println(b);
-        Iterable<Board> sb = b.neighbors();
-        Iterator<Board> isb = sb.iterator();
-        while (isb.hasNext()) {
-            StdOut.println(isb.next());
-        }
-        StdOut.println("the previous Board is \n" + b);
+        // read from files
+        for (String filename : args) {
 
-        StdOut.println(b.step);
+            // read in the board specified in the filename
+            In in = new In(filename);
+            int n = in.readInt();
+            int[][] tiles = new int[n][n];
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    tiles[i][j] = in.readInt();
+                }
+            }
+
+
+            Board b = new Board(tiles);
+            StdOut.println(b);
+            // StdOut.println("Board's Hamming is " + b.hamming());
+            // StdOut.println("Board's Manhattan is " + b.manhattan());
+            // StdOut.println("Borad is the goal " + b.isGoal());
+            Board twin = b.twin();
+            StdOut.println(twin);
+            StdOut.println(b);
+            // StdOut.println(twin);
+            // StdOut.println(b);
+            // Iterable<Board> sb = b.neighbors();
+            // Iterator<Board> isb = sb.iterator();
+            // while (isb.hasNext()) {
+            //     StdOut.println(isb.next());
+            // }
+            // StdOut.println("the previous Board is \n" + b);
+            //
+            // StdOut.println(b.step);
+        }
+        int[][] block1 = { { 0, 4, 1 }, { 7, 5, 8 }, { 2, 6, 3 } };
+        int[][] block2 = { { 0, 4, 1, 1 }, { 7, 5, 8, 1 }, { 2, 6, 3 } };
+        int[] a = { 1, 2, 3 };
+        int[] b = { 1, 2, 3 };
+        Board ac = new Board(block1);
+        Board bc = new Board(block2);
+        StdOut.println(ac.equals(bc));
+
 
     }
 }

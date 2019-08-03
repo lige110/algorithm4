@@ -11,9 +11,9 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.Iterator;
 
 public class Solver {
-    private static MinPQ<Node> pq1 = new MinPQ<Node>();
-    private static MinPQ<Node> pq2 = new MinPQ<Node>();
-    private static Stack<Board> solutionBoard = new Stack<Board>();
+    private MinPQ<Node> pq1 = new MinPQ<Node>();
+    private MinPQ<Node> pq2 = new MinPQ<Node>();
+    private Stack<Board> solutionBoard = new Stack<Board>();
     private Node finalNode;
 
     private class Node implements Comparable<Node> {
@@ -51,7 +51,7 @@ public class Solver {
      */
     public Solver(Board initial) {
         if (initial == null) {
-            throw new java.lang.IllegalArgumentException("input Board can't be null!");
+            throw new IllegalArgumentException("input Board can't be null!");
         }
 
         Node initialNode1 = new Node(initial, null);
@@ -65,7 +65,7 @@ public class Solver {
         while (true) {
             // search the first board
             searchNode = pq1.delMin();
-            if (searchNode.board.hamming() == 0) {
+            if (searchNode.board.isGoal()) {
                 finalNode = searchNode;
                 break;
             }
@@ -74,7 +74,7 @@ public class Solver {
                 Iterator<Board> neighbourBoardsIterator = neighbourBoards.iterator();
                 while (neighbourBoardsIterator.hasNext()) {
                     insertNode = new Node(neighbourBoardsIterator.next(), searchNode);
-                    if (insertNode == searchNode.parent) continue;
+                    if (insertNode.equals(searchNode.parent)) continue;
                     pq1.insert(insertNode);
                 }
             }

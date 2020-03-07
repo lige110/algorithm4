@@ -22,7 +22,6 @@ public class test {
         test t = new test();
         int i = t.add(x + 1, y);
         System.out.print(i);
-        Comparator
 
     }
 }

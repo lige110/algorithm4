@@ -24,6 +24,12 @@ public class Board {
 
     }
 
+    /**
+     * This method generates the solution board for the input
+     *
+     * @param dim the dimension of the board
+     * @return solution board
+     */
     private int[][] getRightBoard(int dim) {
         int[][] rBoard = new int[dim][dim];
         for (int i = 0; i < dim; i++) {
@@ -35,6 +41,16 @@ public class Board {
         return rBoard;
 
     }
+
+    /**
+     * This method swap randomly two pixels in the board
+     *
+     * @param x1 x of first pixel
+     * @param y1 y of first pixel
+     * @param x2 x of second pixel
+     * @param y2 y of second pixel
+     * @return swaped board
+     */
 
     private Board swap(int x1, int y1, int x2, int y2) {
         int temp;
@@ -52,10 +68,21 @@ public class Board {
 
     }
 
+    /**
+     * This method returns dimension of board
+     *
+     * @return dimension of board
+     */
+
     public int dimension() {
         return nDim;
     }
 
+    /**
+     * This method calculates the sum of hamming distance between this board with solution board
+     *
+     * @return calculated hamming distance
+     */
     public int hamming() {
         int mis = 0;
         int[][] corBoard = getRightBoard(nDim);
@@ -66,6 +93,12 @@ public class Board {
         }
         return mis;
     }
+
+    /**
+     * This method calculates the sum of manhattan distance between this board with solution board
+     *
+     * @return calculated manhattan distance
+     */
 
     public int manhattan() {
         int manDistance = 0;
@@ -85,9 +118,21 @@ public class Board {
         return manDistance;
     }
 
+    /**
+     * This method judges whether the board is equal to solution
+     *
+     * @return if equals to solution
+     */
+
     public boolean isGoal() {
         return hamming() == 0;
     }
+
+    /**
+     * This method returns a twin of the board. A twin is a board exchanging any pair of tiles.
+     *
+     * @return the twin
+     */
 
     public Board twin() {
         Board twin;
@@ -114,6 +159,13 @@ public class Board {
         return twin;
     }
 
+    /**
+     * This method judges whether two board are equal
+     *
+     * @param y the other board
+     * @return equal or not
+     */
+
     public boolean equals(Object y) {
         if (this == y) return true;
         if (y == null) return false;
@@ -122,24 +174,25 @@ public class Board {
         if (this.board.length != that.board.length) return false;
         if (this.board[0].length != that.board[0].length) return false;
 
-        boolean equal = true;
-        for (int i = 0; i < nDim; i++) {
-            if (!Arrays.equals(this.board[i], that.board[i])) {
-                equal = false;
-                break;
-            }
+        boolean equal = Arrays.deepEquals(this.board, that.board);
 
-        }
+
         return equal;
 
     }
+
+    /**
+     * This method returns all neighbors of the board Neighbor means move any of the tile once
+     *
+     * @return iterable collection
+     */
 
     public Iterable<Board> neighbors() {
         int blankX = 0, blankY = 0;
         int flg = 0;
         Stack<Board> boardStack = new Stack<Board>();
 
-
+        // find the empty tile
         for (int i = 0; i < nDim; i++) {
             for (int j = 0; j < nDim; j++) {
                 if (board[i][j] == 0) {
@@ -237,8 +290,6 @@ public class Board {
         }
         int[][] block1 = { { 0, 4, 1 }, { 7, 5, 8 }, { 2, 6, 3 } };
         int[][] block2 = { { 0, 4, 1, 1 }, { 7, 5, 8, 1 }, { 2, 6, 3 } };
-        int[] a = { 1, 2, 3 };
-        int[] b = { 1, 2, 3 };
         Board ac = new Board(block1);
         Board bc = new Board(block2);
         StdOut.println(ac.equals(bc));

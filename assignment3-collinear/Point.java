@@ -11,6 +11,7 @@
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
@@ -148,25 +149,28 @@ public class Point implements Comparable<Point> {
         /* YOUR CODE HERE */
         Point p1 = new Point(0, 0);
         Point p2 = new Point(100, 100);
-        Point p3 = new Point(50, 70);
-        Point p4 = new Point(0, 60);
-        Point[] plis = new Point[5];
+        Point p3 = new Point(50, 40);
+        Point p4 = new Point(50, 50);
+        Point[] plis = new Point[4];
         plis[0] = p1;
         plis[1] = p2;
         plis[2] = p3;
         plis[3] = p4;
-        //Arrays.sort(plis);
-        for (Point item : plis) {
-            System.out.print(item.toString());
-        }
-        int b = (p1.compareTo(p2));
-        StdOut.println(b);
 
-        // Comparator c = p1.slopeOrder();
-        // Arrays.sort(plis, c);
+        // Arrays.sort(plis);
+
         // for (Point item : plis) {
-        //     StdOut.println(item);
+        //     System.out.print(item.toString());
         // }
+        // int b = (p1.compareTo(p2));
+        // StdOut.println(b);
+
+        // the comparator works fine
+        Arrays.sort(plis, p1.slopeOrder());
+
+        for (Point item : plis) {
+            StdOut.println(item);
+        }
     }
 
 }

@@ -11,9 +11,11 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.Iterator;
 
 public class Solver {
-    private MinPQ<Node> pq1 = new MinPQ<Node>();
-    private MinPQ<Node> pq2 = new MinPQ<Node>();
-    private Stack<Board> solutionBoard = new Stack<Board>();
+    /*
+    Swap any pair of the tiles, only one and must be one board can lead to solution board
+     */
+
+    private final Stack<Board> solutionBoard = new Stack<Board>();
     private Node finalNode;
 
     private class Node implements Comparable<Node> {
@@ -45,7 +47,7 @@ public class Solver {
     }
 
     /***
-     *
+     *This constructor solves the board problem
      * @param initial initial board for the game
      * @var flag to indicate if we have found the correct board
      */
@@ -53,6 +55,9 @@ public class Solver {
         if (initial == null) {
             throw new IllegalArgumentException("input Board can't be null!");
         }
+
+        final MinPQ<Node> pq1 = new MinPQ<Node>();
+        final MinPQ<Node> pq2 = new MinPQ<Node>();
 
         Node initialNode1 = new Node(initial, null);
         Node initialNode2 = new Node(initial.twin(), null);
@@ -74,14 +79,15 @@ public class Solver {
                 Iterator<Board> neighbourBoardsIterator = neighbourBoards.iterator();
                 while (neighbourBoardsIterator.hasNext()) {
                     insertNode = new Node(neighbourBoardsIterator.next(), searchNode);
-                    if (insertNode.equals(searchNode.parent)) continue;
+                    if (searchNode.parent != null && insertNode.board
+                            .equals(searchNode.parent.board)) continue;
                     pq1.insert(insertNode);
                 }
             }
 
             // jump to search the other Board
             searchNode = pq2.delMin();
-            if (searchNode.board.hamming() == 0) {
+            if (searchNode.board.isGoal()) {
                 finalNode = null;
                 break;
             }
@@ -90,15 +96,12 @@ public class Solver {
                 Iterator<Board> neighbourBoardsIterator = neighbourBoards.iterator();
                 while (neighbourBoardsIterator.hasNext()) {
                     insertNode = new Node(neighbourBoardsIterator.next(), searchNode);
-                    if (insertNode == searchNode.parent) continue;
+                    if (searchNode.parent != null && insertNode.board
+                            .equals(searchNode.parent.board)) continue;
                     pq2.insert(insertNode);
                 }
             }
-
-
         }
-
-
     }
 
     public boolean isSolvable() {
@@ -111,6 +114,7 @@ public class Solver {
     }
 
     public Iterable<Board> solution() {
+        if (finalNode == null) return null;
 
         Node temp = finalNode;
 
@@ -119,13 +123,14 @@ public class Solver {
             temp = temp.parent;
 
         }
+        solutionBoard.push(temp.board);
 
         return solutionBoard;
 
     }
 
     public static void main(String[] args) {
-        int[][] block = { { 0, 1, 3 }, { 4, 2, 5 }, { 6, 8, 7 } };
+        int[][] block = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 0 } };
         Board b = new Board(block);
         Solver s = new Solver(b);
         // Iterable<Board> solution = s.solution();
@@ -133,6 +138,7 @@ public class Solver {
         // while (solutionIterator.hasNext()) {
         //     StdOut.println(solutionIterator.next());
         // }
+        StdOut.println(s.moves());
         StdOut.println(s.solution());
     }
 }

@@ -49,7 +49,7 @@ public class PuzzleChecker {
             Board initial = new Board(tiles);
             Solver solver = new Solver(initial);
             StdOut.println(filename + ": " + solver.moves());
-            // StdOut.println(filename + ": " + solver.solution());
+            StdOut.println(filename + ": " + solver.solution());
         }
     }
 }

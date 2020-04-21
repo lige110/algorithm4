@@ -23,7 +23,7 @@ public class NearestNeighborVisualizer {
         String filename = args[0];
         In in = new In(filename);
         PointSET brute = new PointSET();
-        KdTree kdtree = new KdTree();
+        KdTree_me kdtree = new KdTree_me();
         while (!in.isEmpty()) {
             double x = in.readDouble();
             double y = in.readDouble();

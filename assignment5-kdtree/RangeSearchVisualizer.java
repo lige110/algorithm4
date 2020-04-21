@@ -25,7 +25,7 @@ public class RangeSearchVisualizer {
         String filename = args[0];
         In in = new In(filename);
         PointSET brute = new PointSET();
-        KdTree kdtree = new KdTree();
+        KdTree_me kdtree = new KdTree_me();
         while (!in.isEmpty()) {
             double x = in.readDouble();
             double y = in.readDouble();
@@ -85,6 +85,7 @@ public class RangeSearchVisualizer {
             StdDraw.setPenColor(StdDraw.RED);
             for (Point2D p : brute.range(rect))
                 p.draw();
+
 
             // draw the range search results for kd-tree in blue
             StdDraw.setPenRadius(0.02);

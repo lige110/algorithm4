@@ -31,9 +31,10 @@ public class KdTreeVisualizer {
                     StdDraw.clear();
                     kdtree.draw();
                     StdDraw.show();
+                    StdOut.println(kdtree.size());
                 }
             }
-            StdDraw.pause(20);
+            StdDraw.pause(200);
         }
 
     }

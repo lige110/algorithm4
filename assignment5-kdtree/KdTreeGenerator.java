@@ -1,7 +1,7 @@
 /******************************************************************************
  *  Compilation:  javac KdTreeGenerator.java
  *  Execution:    java KdTreeGenerator n
- *  Dependencies: 
+ *  Dependencies:
  *
  *  Creates n random points in the unit square and print to standard output.
  *
@@ -25,6 +25,7 @@ public class KdTreeGenerator {
             double x = StdRandom.uniform(0.0, 1.0);
             double y = StdRandom.uniform(0.0, 1.0);
             StdOut.printf("%8.6f %8.6f\n", x, y);
+
         }
     }
 }

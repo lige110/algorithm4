@@ -1,6 +1,6 @@
 # algorithm4
 
-This is my homework projects for lecture Algorithm 4. There are five projects.
+My homework projects for lecture Algorithm 4.
 
 ## 1. Percolation
 
